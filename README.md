@@ -51,7 +51,7 @@ belongs_to: user
 |item          |reference |null: false, foreign_key: true |
 
 ### Association
-has_one: purchase
+belongs_to: purchase
 
 ## purchasesテーブル
 
@@ -63,4 +63,4 @@ has_one: purchase
 ### Association
 belongs_to: user
 belongs_to: item
-belongs_to: destination
+has_one: destination
