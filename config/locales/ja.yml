@@ -1,0 +1,17 @@
+ja:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      default: "%Y-%m-%d"
+
+
+ja:
+  devise:
+    registrations:
+      user:
+        attributes:
+          nickname:
+            blank: "ニックネームを入力してください"
