@@ -13,5 +13,5 @@ class User < ApplicationRecord
       validates :family_name_kana
       validates :first_name_kana
     end
-    validates :password, format: { with:/\A(?=.*[a-z])(?=.*\d)[a-z\d]{6,}\z/i,message:"パスワードは英数字混合の６文字以上です。"}
+    validates :password, format: { with:/\A(?=.*[a-z])(?=.*\d)[a-z\d]\z/i,message:"パスワードは英数字混合の６文字以上です。"}
 end
