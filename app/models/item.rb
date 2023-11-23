@@ -13,10 +13,17 @@ class Item < ApplicationRecord
     validates :preparation_day_id
     validates :prefecture_id
   end
-
-  validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9999999 }
-  validates :name, format: { with: /^.{1,40}$/ ,message:"商品名は40文字以下です。"}
-  validates :introduction, format: { with: /^.{1,1000}$/ ,message:"説明は1000文字以内です。"}
+  with_options numericality: { other_than: 1 } do
+    validates :category_id
+    validates :condition_id
+    validates :postage_payer_id
+    validates :preparation_day_id
+    validates :prefecture_id
+  end
+  validates :price, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9999999 }
+  validates_format_of :price, with: /\A\d+\z/, message: "is not a number"
+  validates :name, format: { with: /\A.{1,40}\z/,message:"is too long (maximum is 40 characters)"}
+  validates :introduction, format: { with: /\A.{1,1000}\z/ ,message:"is too long (maximum is 1000 characters)"}
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to :prefecture
   belongs_to :category

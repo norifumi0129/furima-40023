@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Item, type: :model do
   before do
-    @user = FactoryBot.create(:user)
-    @item = FactoryBot.build(:item, user: @user)
+    user = FactoryBot.create(:user)
+    @item = FactoryBot.build(:item, user: user)
   end
   describe '商品出品' do
     context '商品が出品できる' do
@@ -56,6 +56,46 @@ RSpec.describe Item, type: :model do
         @item.price = 10000000
         @item.valid?
         expect(@item.errors.full_messages).to include("Price must be less than or equal to 9999999")
+      end
+      it 'priceは半角数字以外で入力すると出品できない' do
+        @item = Item.new(price: 'abc')
+        @item.valid?
+        expect(@item.errors[:price]).to include("is not a number")
+      end
+      it 'category_idが1なら出品できない' do
+        category_id = 1
+        item = FactoryBot.build(:item, user: @user, category_id: category_id)
+        expect(item).not_to be_valid
+        expect(item.errors[:category_id]).to include("must be other than 1")
+      end
+      it 'condition_idが1なら出品できない' do
+        condition_id = 1
+        item = FactoryBot.build(:item, user: @user, condition_id: condition_id)
+        expect(item).not_to be_valid
+        expect(item.errors[:condition_id]).to include("must be other than 1")
+      end
+      it 'postage_payer_idが1なら出品できない' do
+        postage_payer_id = 1
+        item = FactoryBot.build(:item, user: @user, postage_payer_id: postage_payer_id)
+        expect(item).not_to be_valid
+        expect(item.errors[:postage_payer_id]).to include("must be other than 1")
+      end
+      it 'prefecture_idが1ならなら出品できない' do
+        prefecture_id = 1
+        item = FactoryBot.build(:item, user: @user, prefecture_id: prefecture_id)
+        expect(item).not_to be_valid
+        expect(item.errors[:prefecture_id]).to include("must be other than 1")
+      end
+      it 'preparation_day_idが1なら出品できない' do
+        preparation_day_id = 1
+        item = FactoryBot.build(:item, user: @user, preparation_day_id: preparation_day_id)
+        expect(item).not_to be_valid
+        expect(item.errors[:preparation_day_id]).to include("must be other than 1")
+      end
+      it 'ユーザーが紐付いていなければ投稿できない' do
+        @item.user = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include('User must exist')
       end
     end
   end

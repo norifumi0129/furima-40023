@@ -13,7 +13,13 @@ class ItemsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-
+  def self.search(search)
+    if search!=""
+      Item.where('text LIKE(?)', "%#{search}%")
+    else
+      Item.all
+    end
+  end
   private
   def item_params
     params.require(:item).permit(:name, :introduction, :category_id, :condition_id, :postage_payer_id, :preparation_day_id, :prefecture_id, :price, :image).merge(user_id: current_user.id)
