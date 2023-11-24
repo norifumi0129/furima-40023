@@ -1,7 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: :new
   def index
-    @items = Item.all
     @items = Item.all.order(created_at: :desc)
   end
 
@@ -18,10 +17,10 @@ class ItemsController < ApplicationController
     end
   end
 
-  def show
-    @item = Item.find(params[:id])
-    @postage_payer = PostagePayer.find_by_id @item.postage_payer_id
-  end
+  # def show
+    # @item = Item.find(params[:id])
+    # @postage_payer = PostagePayer.find_by_id @item.postage_payer_id
+  # end
 
   def self.search(search)
     if search != ''
