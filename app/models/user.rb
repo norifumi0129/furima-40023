@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  has_many :items
     with_options presence: true do
       validates :nickname
       validates :birthday
@@ -13,5 +14,5 @@ class User < ApplicationRecord
       validates :family_name_kana
       validates :first_name_kana
     end
-    validates :password, format: { with:/\A(?=.*[a-z])(?=.*\d)[a-z\d]\z/i,message:"パスワードは英数字混合の６文字以上です。"}
+    validates :password, format: { with:/\A(?=.*[a-z])(?=.*\d)[a-z\d]+\z/i,message:"パスワードは英数字混合の６文字以上です。"}
 end
