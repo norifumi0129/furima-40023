@@ -28,15 +28,18 @@ class ItemsController < ApplicationController
 
   def edit
     @item = Item.find(params[:id])
-    unless current_user == @item.user
-      redirect_to root_path, alert: "You don't have permission to edit this item."
-    end
+    return if current_user == @item.user
+
+    redirect_to root_path
   end
 
   def update
-    item = Item.find(params[:id])
-    item.update(item_params)
-    redirect_to item_path
+    @item = Item.find(params[:id])
+    if @item.update(item_params)
+      redirect_to item_path
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def self.search(search)
@@ -48,6 +51,7 @@ class ItemsController < ApplicationController
   end
 
   private
+
   def item_params
     params.require(:item).permit(:name, :introduction, :category_id, :condition_id, :postage_payer_id, :preparation_day_id,
                                  :prefecture_id, :price, :image).merge(user_id: current_user.id)
