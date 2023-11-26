@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: :new
-  before_action :require_signin, only: [:edit, :update]
+  before_action :authenticate_user!, only: [:new ,:destroy]
+  before_action :require_signin, only: [:edit, :update, :destroy]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -49,8 +49,10 @@ class ItemsController < ApplicationController
     end
   end
   def destroy
-    @item.destroy
-    redirect_to root_path
+    if current_user == @item.user
+      @item.destroy
+      redirect_to root_path
+    end
   end
   private
   def require_signin
@@ -58,7 +60,7 @@ class ItemsController < ApplicationController
 
     redirect_to new_user_session_path
   end
-  def set_item
+  def set_item #複数のメソッドをまとめたもの
     @item = Item.find(params[:id])
   end
 
