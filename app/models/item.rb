@@ -13,7 +13,7 @@ class Item < ApplicationRecord
   end
   validates :price, presence: true
   validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999 }
-  validates_format_of :price, with: /\A\d+\z/, message: 'は半角数値のみ入力してください', if: -> { price.present? }
+  validates :price, format: { with: /\A\d+\z/, message: 'は半角数値のみ入力してください' }, if: -> { price.present? }
 
   validates :name, presence: true, format: { with: /\A.{1,40}\z/, message: 'is too long (maximum is 40 characters)' }
   validates :introduction, presence: true, format: { with: /\A.{1,1000}\z/, message: 'is too long (maximum is 1000 characters)' }
