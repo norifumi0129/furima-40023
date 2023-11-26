@@ -53,7 +53,7 @@ class ItemsController < ApplicationController
   def require_signin
     return if user_signed_in? # または適切なログイン状態のチェック
 
-    redirect_to root_path
+    redirect_to new_user_session_path
   end
   def set_item
     @item = Item.find(params[:id])
