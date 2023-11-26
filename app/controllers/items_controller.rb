@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: :new
   before_action :require_signin, only: [:edit, :update]
-  before_action :set_item, only: [:show, :edit, :update]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
 
   def index
     @items = Item.all.order(created_at: :desc)
@@ -48,7 +48,10 @@ class ItemsController < ApplicationController
       Item.all
     end
   end
-
+  def destroy
+    @item.destroy
+    redirect_to root_path
+  end
   private
   def require_signin
     return if user_signed_in? # または適切なログイン状態のチェック
