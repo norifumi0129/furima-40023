@@ -1,6 +1,4 @@
 class OrdersController < ApplicationController
-  before_action :ensure_user_owns_item, only: [:new]
-  
   def index
     @item = Item.find(params[:item_id])
     @order = Order.new
@@ -41,23 +39,5 @@ class OrdersController < ApplicationController
       card: order_params[:token],
       currency: 'jpy'
     )
-  end
-  def ensure_user_owns_item
-    # ログインしていることを確認
-    unless user_signed_in?
-      redirect_to new_user_session_path
-      return
-    end
-
-    # 出品された商品のIDを取得（例：params[:item_id]に出品商品のIDがあると仮定）
-    item_id = params[:item_id]
-
-    # 出品商品が存在するか確認
-    item = Item.find_by(id: item_id)
-
-    # 出品商品が存在しないか、ログインユーザーがその商品の出品者である場合
-    if item.nil || item.user != current_user
-      redirect_to root_path
-    end
   end
 end
