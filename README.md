@@ -15,7 +15,7 @@
 
 ### Association
 has_many: items
-has_many: orders
+has_many: purchases
 
 ## Itemsテーブル
 
@@ -33,10 +33,10 @@ has_many: orders
 
 
 ### Association
-has_one: order
+has_one: purchase
 belongs_to: user
 
-## addressテーブル
+## Destinationsテーブル
 
 |Column        |Type       |Options                        |
 |--------------|-----------|-------------------------------|
@@ -46,12 +46,12 @@ belongs_to: user
 |house_number  |string     |null: false                    |
 |building_name |string     |                               |
 |phone_number  |string     |null: false                    |
-|order         |references |null: false, foreign_key: true |
+|purchase      |references |null: false, foreign_key: true |
 
 ### Association
-belongs_to: order
+belongs_to: purchase
 
-## ordersテーブル
+## purchasesテーブル
 
 |Column  |Type       |Options                        |
 |--------|-----------|-------------------------------|
@@ -61,4 +61,4 @@ belongs_to: order
 ### Association
 belongs_to: user
 belongs_to: item
-has_one: address
+has_one: destination
