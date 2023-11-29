@@ -15,22 +15,19 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.create(order_params)
-    Address.create(address_params)
-    redirect_to root_path
-    #@order_address = OrderAddress.new(order_params)
-    #if @order_address.save
-    #  pay_item
-    #  redirect_to root_path
-    #else
-    #  render :index
-    #end
+    @order_address = OrderAddress.new(order_params)
+    if @order_address.valid?
+      @order_address.save
+      redirect_to root_path
+    else
+      render :index, status: :unprocessable_entity
+    end
   end
 
   private
 
   def order_params
-    params.require(:order_address).permit(:token, :postal_code, :prefecture_id, :city, :house_number, :building_name, :phone_number,:item_id,:user_id,:order_id)
+    params.require(:order_address).permit(:token, :postal_code, :prefecture_id, :city, :house_number, :building_name, :phone_number).merge(user_id: current_user.id)
   end
   
   # def pay_item
