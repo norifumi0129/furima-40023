@@ -1,36 +1,25 @@
 class OrdersController < ApplicationController
   def index
     @item = Item.find(params[:item_id])
-    @order = Order.new
+    
   end
-  def new
-    @order_address = OrderAddress.new
-  end
+
   def create
-    @order = Order.new(order_params)
-    if @order.valid?
-      @order.save
-      return redirect_to root_path
-    else
-      render 'index', status: :unprocessable_entity
-    end
     @order_address = OrderAddress.new(order_params)
-    if @order_address.valid?
-      @order_address.save
+    if @orderaddress.valid?
+      @orderaddress.save(params,current_user.id)
       redirect_to root_path
     else
-      render :new, status: :unprocessable_entity
+      @item = Item.find(params[:item_id])
+      render :index
     end
   end
       
   private
-  def order_params
-    params.permit(:price).merge(user_id: current_user.id)
-  end
-  
-  def address_params
-    params.require(:order_params).permit(:postal_code, :prefecture, :city, :house_number, :building_name, :phone_number).merge(user_id: current_user.id)
-  end
+    def order_params
+      params.require(:order_address).permit(:postal_code, :prefecture_id, :city, :street_address, :building_name, :phone_number).merge(item_id: params[:item_id], user_id: current_user.id)
+    end
+    
 
   def pay_item
     Payjp.api_key =    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
