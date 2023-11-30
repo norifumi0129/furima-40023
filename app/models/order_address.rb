@@ -1,6 +1,6 @@
 class OrderAddress
   include ActiveModel::Model
-  attr_accessor :image, :postal_code, :prefecture_id, :city, :house_number, :building_name, :phone_number, :user_id, :item_id,
+  attr_accessor :token, :image, :postal_code, :prefecture_id, :city, :house_number, :building_name, :phone_number, :user_id, :item_id,
                 :order_id
 
   with_options presence: true do
@@ -11,6 +11,7 @@ class OrderAddress
     validates :phone_number, format: { with: /\A0\d{9,10}\z/, message: 'は0から始まる10桁または11桁の整数で入力してください' }
     validates :user_id
     validates :item_id
+    validates :token
   end
   def save
     order = Order.create(item_id:, user_id:)
