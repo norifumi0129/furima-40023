@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :destroy]
   before_action :require_signin, only: [:edit, :update, :destroy]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
-
+  before_action :editing_prohibited, only: [:edit]
   def index
     @items = Item.all.order(created_at: :desc)
   end
@@ -51,10 +51,8 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    if current_user == @item.user
-      @item.destroy
-    end  
-      redirect_to root_path
+    @item.destroy if current_user == @item.user
+    redirect_to root_path
   end
 
   private
@@ -72,5 +70,11 @@ class ItemsController < ApplicationController
   def item_params
     params.require(:item).permit(:name, :introduction, :category_id, :condition_id, :postage_payer_id, :preparation_day_id,
                                  :prefecture_id, :price, :image).merge(user_id: current_user.id)
+  end
+
+  def editing_prohibited
+    return unless current_user == @item.user && !@item.id.nil?
+
+    redirect_to root_path
   end
 end
