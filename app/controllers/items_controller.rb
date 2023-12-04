@@ -21,6 +21,7 @@ class ItemsController < ApplicationController
   end
 
   def show
+    @item = Item.find(params[:id])
     @postage_payer = PostagePayer.find_by_id @item.postage_payer_id
     @condition = Condition.find_by_id @item.condition_id
     @category = Category.find_by_id @item.category_id
