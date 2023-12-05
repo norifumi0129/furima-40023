@@ -73,9 +73,10 @@ class ItemsController < ApplicationController
   end
 
   def editing_prohibited
-    unless current_user == @item.user && !@item.id.nil?
+    if @item.nil?
       redirect_to root_path
-      return
+    elsif current_user != @item.user || @item.id.nil?
+      redirect_to root_path
     end
   end
 end
