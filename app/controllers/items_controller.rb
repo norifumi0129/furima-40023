@@ -73,7 +73,13 @@ class ItemsController < ApplicationController
   end
 
   def editing_prohibited
-    if @item.nil? || current_user != @item.user || @item.id.nil?
+    if user_signed_in? && current_user == @item.user
+      # ログイン済みかつ現在のユーザーが @item の所有者の場合
+      if !@item.order.nil?
+        redirect_to root_path
+      end
+    else
+      # ログインしていないか、現在のユーザーが @item の所有者でない場合
       redirect_to root_path
     end
   end
